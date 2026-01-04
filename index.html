@@ -2,207 +2,173 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="utf-8" />
-  <title>محول فاتح العجمي — واجهة محسّنة</title>
+  <title>محول فاتح العجمي — مُحدَّث (عداد عام)</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
   <style>
     :root{
-      --bg-1: #020316;
-      --bg-2: #071026;
-      --glass: rgba(10,12,20,0.6);
-      --accent-1: #bc13fe;
-      --accent-2: #00d4ff;
-      --accent-3: #00ffa3;
+      --bg-deep:#05070a;
+      --glass: rgba(15,22,36,0.85);
+      --neon-purple:#bc13fe;
+      --neon-blue:#00d4ff;
+      --neon-green:#00ffa3;
     }
     *{box-sizing:border-box}
     html,body{height:100%}
     body{
-      margin:0; font-family:"Cairo",sans-serif; background:linear-gradient(180deg,var(--bg-1),var(--bg-2)); color:#fff;
-      display:flex; align-items:center; justify-content:center; padding:28px;
+      margin:0; font-family:'Cairo', sans-serif; background:var(--bg-deep); color:#fff;
+      display:flex; justify-content:center; padding:28px;
     }
 
-    /* Frame / wrapper */
-    .frame{
-      width:100%; max-width:980px; border-radius:22px; padding:18px; position:relative;
-      background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    .app-shell{
+      width:94%; max-width:440px; background:var(--glass); border-radius:36px; padding:26px;
+      border:1px solid rgba(188,19,254,0.12); box-shadow:0 10px 40px rgba(0,0,0,0.6), 0 0 30px rgba(188,19,254,0.06);
+      backdrop-filter: blur(14px);
+    }
+
+    .header {
+      display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:6px;
+    }
+    .header h1{
+      margin:0; font-size:1.4rem; font-weight:900; text-align:center;
+      background:linear-gradient(135deg,var(--neon-purple),var(--neon-blue)); -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+    }
+    .sub{font-size:0.82rem; color:rgba(255,255,255,0.7); text-align:center; margin-bottom:10px}
+
+    .visitor-badge{
+      background:linear-gradient(90deg, rgba(255,255,255,0.02), transparent); padding:8px 12px; border-radius:12px; text-align:center;
       border:1px solid rgba(255,255,255,0.03);
-      box-shadow: 0 10px 40px rgba(2,6,20,0.7), 0 0 40px rgba(124,25,252,0.06);
-      overflow:hidden;
     }
+    .visitor-badge .label{font-size:0.78rem;color:rgba(255,255,255,0.7)}
+    .visitor-badge .num{font-weight:900;color:var(--neon-green);font-size:1rem}
 
-    .top{display:flex; gap:12px; align-items:center; justify-content:space-between; margin-bottom:12px}
-    .brand{display:flex; gap:12px; align-items:center}
-    .logo{width:64px; height:64px; border-radius:12px; display:flex; align-items:center; justify-content:center;
-      background:linear-gradient(135deg,var(--accent-1),var(--accent-2)); box-shadow:0 6px 24px rgba(124,25,252,0.14);
-      font-weight:900; font-size:1.3rem;
+    .nav-bar{display:flex; gap:8px; background:rgba(0,0,0,0.4); padding:6px; border-radius:18px; margin-bottom:12px;}
+    .nav-btn{flex:1; padding:10px; border-radius:12px; border:none; background:none; color:#fff; font-weight:800; cursor:pointer}
+    .nav-btn.active{background:linear-gradient(45deg,var(--neon-purple),var(--neon-blue)); box-shadow:0 8px 20px rgba(124,25,252,0.12)}
+
+    .glass-box{background:rgba(0,0,0,0.35); border-radius:16px; padding:14px; margin-bottom:14px; border:1px solid rgba(255,255,255,0.03)}
+    input, select{width:100%; padding:12px; border-radius:12px; border:1px solid rgba(0,212,255,0.08); background:#000; color:var(--neon-blue); font-weight:800; outline:none; text-align:center}
+
+    .calc-row{display:flex; gap:8px; align-items:center; margin-bottom:12px}
+    .sign-btn{min-width:48px; height:48px; border-radius:12px; border:1px solid rgba(255,255,255,0.04); background:rgba(255,255,255,0.02); color:var(--neon-green); font-weight:900; cursor:pointer}
+    .del-btn{background:none;border:none;color:#ff6b6b;font-size:1.2rem;cursor:pointer}
+
+    .result{margin-top:12px; padding:3px; border-radius:20px; background: linear-gradient(90deg, rgba(188,19,254,0.95), rgba(0,212,255,0.95), rgba(0,255,163,0.95));}
+    .result-inner{border-radius:16px; padding:18px; text-align:center; background:linear-gradient(180deg, rgba(0,0,0,0.5), rgba(0,0,0,0.34)); border:1px solid rgba(255,255,255,0.03)}
+    .val-main{font-size:2.8rem; font-weight:900; color:var(--neon-green); text-shadow:0 0 18px rgba(0,255,163,0.12); display:block}
+    .muted{font-size:0.85rem; color:rgba(255,255,255,0.7); margin-top:8px}
+
+    .segmented{display:flex; gap:8px}
+    .segmented button{flex:1; padding:10px; border-radius:12px; border:1px solid rgba(255,255,255,0.03); background:transparent; color:#fff; font-weight:800; cursor:pointer}
+    .segmented button.active{background:linear-gradient(45deg,var(--neon-purple),var(--neon-blue)); box-shadow:0 8px 20px rgba(124,25,252,0.12)}
+
+    .footer{
+      margin-top:20px; text-align:center; padding:12px; border-radius:14px; border:1px solid rgba(0,212,255,0.08); background:rgba(0,0,0,0.33);
+      display:flex; flex-direction:column; gap:6px; align-items:center;
     }
-    .title h1{margin:0; font-size:1.3rem; font-weight:900; line-height:1}
-    .title p{margin:2px 0 0 0; font-size:0.85rem; color:rgba(255,255,255,0.7)}
-
-    /* visitor badge */
-    .visitor{display:flex; gap:10px; align-items:center; background: linear-gradient(90deg, rgba(255,255,255,0.02), transparent);
-      padding:8px 12px; border-radius:999px; border:1px solid rgba(255,255,255,0.03);
-    }
-    .visitor .count{font-weight:900; color:var(--accent-3); font-size:1.05rem}
-
-    .nav{display:flex; gap:8px; margin:16px 0; background:rgba(255,255,255,0.02); padding:6px; border-radius:12px}
-    .nav button{flex:1;padding:10px;border-radius:10px;border:none;background:transparent;color:#fff;cursor:pointer;font-weight:800}
-    .nav button.active{background:linear-gradient(90deg,var(--accent-1),var(--accent-2)); box-shadow:0 8px 20px rgba(124,25,252,0.12)}
-
-    /* responsive grid: uses flexible minmax so layout adapts better on laptops */
-    .grid{display:grid; grid-template-columns: 1fr minmax(280px, 360px); gap:14px; align-items:start}
-    @media (max-width:980px){ .grid{grid-template-columns: 1fr; } }
-
-    .card{background: linear-gradient(180deg, rgba(0,0,0,0.45), rgba(0,0,0,0.33)); border-radius:14px; padding:14px; border:1px solid rgba(255,255,255,0.03); box-shadow: 0 8px 28px rgba(2,6,20,0.6); overflow:hidden}
-    .glass{border-radius:12px; padding:10px; background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.02)}
-
-    input,select,button{font-family:inherit}
-    input,select{width:100%; padding:12px; border-radius:10px; border:1px solid rgba(255,255,255,0.04); background:#000; color:var(--accent-2); font-weight:800; text-align:center}
-    .row{display:flex; gap:8px; align-items:center}
-    .calc-row{display:flex; gap:8px; align-items:center; margin-bottom:10px}
-    .sign-btn{min-width:48px; height:48px; border-radius:12px; border:1px solid rgba(255,255,255,0.03); background:rgba(255,255,255,0.02); color:var(--accent-3); font-weight:900; cursor:pointer}
-    .del-btn{background:transparent;border:none;color:#ff6b6b;font-size:1.1rem;cursor:pointer}
-
-    /* Colored framed result:
-       - outer .result gives the colorful border (gradient)
-       - inner .result-inner holds the content with its own background
-    */
-    .result{padding:3px;border-radius:14px; background: linear-gradient(90deg, rgba(188,19,254,0.9), rgba(0,212,255,0.9), rgba(0,255,163,0.9)); margin-top:12px}
-    .result-inner{background:linear-gradient(180deg, rgba(0,0,0,0.45), rgba(0,0,0,0.33)); border-radius:11px; padding:16px; text-align:center; border:1px solid rgba(255,255,255,0.03)}
-    .val-main{font-size:2.6rem; font-weight:900; color:var(--accent-3); text-shadow:0 0 12px rgba(0,255,163,0.12)}
-
-    .seg{display:flex; gap:8px}
-    .seg button{flex:1;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.03);background:transparent;color:#fff;font-weight:800;cursor:pointer}
-    .seg button.active{background:linear-gradient(90deg,var(--accent-1),var(--accent-2)); box-shadow:0 10px 30px rgba(124,25,252,0.08)}
-
-    .footer{margin-top:14px; display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap}
-    .phone{font-weight:900; color:var(--accent-2); text-decoration:none; padding:8px 12px; border-radius:10px; border:1px solid rgba(255,255,255,0.02); background:linear-gradient(90deg, rgba(0,0,0,0.35), rgba(0,0,0,0.25));}
-    .muted{font-size:0.82rem; color:rgba(255,255,255,0.65)}
-
-    /* small adjustments for very wide screens */
-    @media (min-width:1200px){
-      .grid{grid-template-columns: 1fr 420px}
-      .frame{padding:22px}
-    }
+    .footer .name{font-weight:900; color:var(--neon-blue)}
+    .phone{color:#fff; font-weight:800; text-decoration:none; background:rgba(0,0,0,0.25); padding:8px 12px; border-radius:12px; border:1px solid rgba(255,255,255,0.03)}
   </style>
 </head>
 <body>
-  <div class="frame" role="application" aria-label="محول الفاتح">
-    <div class="top">
-      <div class="brand">
-        <div class="logo">FA</div>
-        <div class="title">
-          <h1>محول العملة السوري</h1>
-          <p class="muted">واجهة محسّنة — تحويل وحاسبة ذكية</p>
-        </div>
+  <div class="app-shell" role="application" aria-label="محول فاتح العجمي">
+    <div class="header">
+      <div style="display:flex;flex-direction:column;gap:4px;">
+        <h1>محول العملة السوري</h1>
+        <div class="sub">واجهة طوليّة محسّنة — تحويل وحاسبة</div>
       </div>
 
-      <div class="visitor" title="عدد الأجهزة الفريدة التي زارت الموقع">
-        <div style="display:flex;flex-direction:column;text-align:right">
-          <div class="muted" style="font-size:0.82rem">أجهزة زارت الموقع</div>
-          <div class="count" id="visitor-count">--</div>
+      <!-- PUBLIC VISITOR COUNT: visible to everyone -->
+      <div class="visitor-badge" id="visitor-badge" title="عدد الأجهزة الفريدة التي زارت الموقع">
+        <div style="text-align:right">
+          <div class="label">أجهزة زارت الموقع</div>
+          <div class="num" id="visitor-count">--</div>
         </div>
       </div>
     </div>
 
-    <div class="nav" role="tablist">
-      <button class="active" onclick="tab(0,this)">تحويل</button>
-      <button onclick="tab(1,this)">حاسبة</button>
-      <button onclick="tab(2,this)">العملات</button>
+    <div class="nav-bar" role="tablist">
+      <button class="nav-btn active" onclick="tab(0,this)">تحويل</button>
+      <button class="nav-btn" onclick="tab(1,this)">حاسبة</button>
+      <button class="nav-btn" onclick="tab(2,this)">العملات</button>
     </div>
 
-    <div class="grid">
-      <div>
-        <!-- تحويل -->
-        <div id="s0" class="card">
-          <div class="glass">
-            <input type="number" id="amt" placeholder="0.00" oninput="doConv()" aria-label="المبلغ">
-            <div style="display:flex; gap:10px; margin-top:12px">
-              <select id="from" onchange="doConv()"></select>
-              <select id="to" onchange="doConv()"></select>
-            </div>
-          </div>
-
-          <div class="result" aria-live="polite">
-            <div class="result-inner">
-              <div class="val-main" id="res">0.00</div>
-              <div class="muted">النتيجة بالنسبة لـ سوري جديد</div>
-              <div style="margin-top:12px"><button onclick="cls(0)" style="padding:10px;border-radius:10px;border:none;background:linear-gradient(90deg,var(--accent-1),var(--accent-2));color:#fff;cursor:pointer">🔄 مسح</button></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- حاسبة -->
-        <div id="s1" class="card" style="display:none; margin-top:14px">
-          <div id="calc-stack" style="max-height:260px; overflow:auto; margin-bottom:10px"></div>
-
-          <div style="display:flex; gap:8px; margin-bottom:12px">
-            <button onclick="addRow()" style="flex:1;padding:10px;border-radius:10px;border:1px solid var(--accent-1);background:transparent;color:var(--accent-1);font-weight:900;cursor:pointer">+ إضافة مبلغ</button>
-            <button onclick="clearAllRows()" style="padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:#fff;cursor:pointer">🧹 مسح الكل</button>
-          </div>
-
-          <div class="glass">
-            <div style="display:flex; gap:10px; align-items:center">
-              <div style="flex:1">
-                <select id="target" onchange="doSum()"></select>
-              </div>
-              <div style="width:160px">
-                <div class="seg" role="radiogroup" aria-label="اختيار العملية">
-                  <button id="op-sum" class="active" onclick="setOp('sum',this)">جمع</button>
-                  <button id="op-sub" onclick="setOp('sub',this)">طرح</button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="result" aria-live="polite">
-            <div class="result-inner">
-              <div class="val-main" id="total">0.00</div>
-              <div class="muted">المجموع بحسب الإشارات والهدف المختار</div>
-              <div style="margin-top:12px"><button onclick="cls(1)" style="padding:10px;border-radius:10px;border:none;background:linear-gradient(90deg,var(--accent-1),var(--accent-2));color:#fff;cursor:pointer">🔄 إعادة تعيين</button></div>
-            </div>
-          </div>
+    <!-- تحويل -->
+    <div id="s0" class="section active-sec">
+      <div class="glass-box">
+        <input type="number" id="amt" placeholder="0.00" oninput="doConv()" aria-label="المبلغ">
+        <div style="display:flex; gap:10px; margin-top:12px;">
+          <select id="from" onchange="doConv()"></select>
+          <select id="to" onchange="doConv()"></select>
         </div>
       </div>
 
-      <!-- الجهة اليمنى: قائمة العملات والبيانات -->
-      <div>
-        <div id="s2" class="card">
-          <div style="display:flex; gap:8px; margin-bottom:10px">
-            <input type="text" id="n-n" placeholder="اسم العملة الجديدة" />
+      <div class="result" aria-live="polite">
+        <div class="result-inner">
+          <span class="val-main" id="res">0.00</span>
+          <div class="muted">النتيجة بالنسبة لـ سوري جديد</div>
+          <div style="margin-top:12px">
+            <button onclick="cls(0)" style="padding:12px;border-radius:12px;border:none;background:linear-gradient(45deg,var(--neon-purple),var(--neon-blue));color:#fff;cursor:pointer">🔄 مسح</button>
           </div>
-          <div style="display:flex; gap:8px; margin-bottom:10px">
-            <input type="number" id="n-v" placeholder="السعر مقابل المرجع" />
-            <select id="n-r"></select>
-          </div>
-          <div style="display:flex; gap:8px">
-            <button onclick="addCur()" style="flex:1;padding:10px;border-radius:10px;border:none;background:linear-gradient(90deg,var(--accent-1),var(--accent-2));color:#fff;cursor:pointer">إضافة / تحديث</button>
-            <button onclick="exportJSON()" style="padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:#fff;cursor:pointer">تصدير</button>
-          </div>
-
-          <div id="db-list" style="margin-top:12px; max-height:300px; overflow:auto"></div>
         </div>
       </div>
+    </div>
+
+    <!-- حاسبة -->
+    <div id="s1" class="section" style="display:none">
+      <div id="calc-stack" style="max-height:260px; overflow:auto; margin-bottom:12px;"></div>
+
+      <div style="display:flex; gap:10px; margin-bottom:12px;">
+        <button onclick="addRow()" style="flex:1;padding:12px;border-radius:12px;border:1px solid var(--neon-purple);background:none;color:var(--neon-purple);font-weight:900;cursor:pointer">+ إضافة مبلغ</button>
+        <button onclick="clearAllRows()" style="padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,0.06);background:none;color:#fff;cursor:pointer">🧹 مسح الكل</button>
+      </div>
+
+      <div class="glass-box" style="margin-bottom:12px;">
+        <select id="target" onchange="doSum()"></select>
+        <div style="margin-top:10px" class="segmented" role="radiogroup" aria-label="اختيار العملية">
+          <button id="op-sum" class="active" onclick="setOp('sum',this)">جمع</button>
+          <button id="op-sub" onclick="setOp('sub',this)">طرح</button>
+        </div>
+        <div style="margin-top:8px;font-size:0.82rem;color:rgba(255,255,255,0.7)">في وضع الطرح: القيمة الأولى - مجموع الباقي (يمكن تعديل إشارة كل صف)</div>
+      </div>
+
+      <div class="result" aria-live="polite">
+        <div class="result-inner">
+          <span class="val-main" id="total">0.00</span>
+          <div class="muted">المجموع بحسب الإشارات والهدف المختار</div>
+          <div style="margin-top:12px">
+            <button onclick="cls(1)" style="padding:12px;border-radius:12px;border:none;background:linear-gradient(45deg,var(--neon-purple),var(--neon-blue));color:#fff;cursor:pointer">🔄 إعادة تعيين</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="s2" class="section" style="display:none">
+      <div class="glass-box" style="margin-bottom:12px;">
+        <input type="text" id="n-n" placeholder="اسم العملة الجديدة" style="margin-bottom:10px;">
+        <input type="number" id="n-v" placeholder="السعر مقابل المرجع" style="margin-bottom:10px;">
+        <select id="n-r" style="margin-bottom:10px;"></select>
+        <button onclick="addCur()" style="width:100%; padding:12px; border-radius:12px; border:none; background:linear-gradient(45deg,var(--neon-purple),var(--neon-blue)); color:#fff; font-weight:900; cursor:pointer">إضافة / تحديث</button>
+      </div>
+      <div id="db-list" style="max-height:200px; overflow:auto;"></div>
     </div>
 
     <div class="footer">
-      <div class="muted">فاتح العجمي</div>
+      <span class="name">فاتح العجمي</span>
       <a class="phone" href="tel:0930887739" aria-label="اتصل على 0930887739">0930887739 📞</a>
     </div>
   </div>
 
 <script>
-/* ---------- تخزين محلي وآمن وبناء DOM بدون innerHTML ---------- */
-const STORAGE_KEY = 'sy_fatih_115_v3';
+/* ---------- local DB and safe DOM helpers ---------- */
+const STORAGE_KEY = 'sy_fatih_115_vertical_public';
 let db = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {
   "سوري جديد": 1,
   "دولار": 115,
   "سوري قديم": 0.01
 };
-
 function saveDB(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(db)); }
-
 function setSelectOptions(selectEl, keys){
   selectEl.innerHTML = '';
   keys.forEach(k => {
@@ -212,10 +178,12 @@ function setSelectOptions(selectEl, keys){
   });
 }
 
+/* ---------- update dropdowns and list ---------- */
 function updateDrops(){
   const keys = Object.keys(db);
   ['from','to','target','n-r'].forEach(id=>{
-    const el = document.getElementById(id); if(!el) return;
+    const el = document.getElementById(id);
+    if(!el) return;
     const prev = el.value;
     setSelectOptions(el, keys);
     if(prev && db[prev] !== undefined) el.value = prev;
@@ -227,28 +195,24 @@ function updateDrops(){
   });
   renderList();
 }
-
 function renderList(){
   const container = document.getElementById('db-list');
   container.innerHTML = '';
   Object.keys(db).forEach(k=>{
     const row = document.createElement('div');
-    row.style.display = 'flex'; row.style.justifyContent = 'space-between';
-    row.style.padding = '8px'; row.style.borderBottom = '1px solid rgba(255,255,255,0.02)';
+    row.style.display = 'flex'; row.style.justifyContent = 'space-between'; row.style.padding = '10px 6px'; row.style.borderBottom = '1px solid rgba(255,255,255,0.03)';
     const left = document.createElement('div');
     const strong = document.createElement('strong'); strong.textContent = `1 ${k}`;
     left.appendChild(strong);
-    const sub = document.createElement('div'); sub.style.fontSize='0.8rem'; sub.style.color='rgba(255,255,255,0.6)';
-    sub.textContent = 'قيمته بـ سوري جديد';
+    const sub = document.createElement('div'); sub.style.fontSize='0.82rem'; sub.style.color='rgba(255,255,255,0.6)'; sub.textContent='قيمته بـ سوري جديد';
     left.appendChild(sub);
-    const right = document.createElement('div'); right.style.fontWeight='900'; right.style.color='var(--accent-1)';
+    const right = document.createElement('div'); right.style.fontWeight='900'; right.style.color='var(--neon-purple)';
     right.textContent = Number(db[k]).toLocaleString(undefined,{maximumFractionDigits:4});
-    row.appendChild(left); row.appendChild(right);
-    container.appendChild(row);
+    row.appendChild(left); row.appendChild(right); container.appendChild(row);
   });
 }
 
-/* ---------- تحويل العملة ---------- */
+/* ---------- conversion ---------- */
 function doConv(){
   const a = parseFloat(document.getElementById('amt').value) || 0;
   const from = db[document.getElementById('from').value] || 1;
@@ -257,7 +221,7 @@ function doConv(){
   document.getElementById('res').textContent = res.toLocaleString(undefined, {maximumFractionDigits:2});
 }
 
-/* ---------- حاسبة الصفوف ---------- */
+/* ---------- calculator rows ---------- */
 function addRow(){
   const stack = document.getElementById('calc-stack');
   const d = document.createElement('div'); d.className = 'calc-row';
@@ -291,7 +255,7 @@ function clearAllRows(){
 let opMode = localStorage.getItem('ajami_opMode') || 'sum';
 function setOp(mode, btn){
   opMode = mode; localStorage.setItem('ajami_opMode', opMode);
-  document.querySelectorAll('.seg button').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.segmented button').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
   const rows = Array.from(document.querySelectorAll('.calc-row'));
   rows.forEach((r,i)=>{
@@ -322,7 +286,7 @@ function cls(n){
   else { document.getElementById('calc-stack').innerHTML=''; addRow(); doSum(); }
 }
 
-/* ---------- إضافة عملة ---------- */
+/* ---------- add currency ---------- */
 function addCur(){
   const name = document.getElementById('n-n').value.trim();
   const ref = document.getElementById('n-r').value;
@@ -333,7 +297,7 @@ function addCur(){
   updateDrops();
 }
 
-/* تصدير JSON للقائمة */
+/* export JSON */
 function exportJSON(){
   const data = JSON.stringify(db, null, 2);
   const blob = new Blob([data], {type:'application/json'});
@@ -342,7 +306,7 @@ function exportJSON(){
   document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
 }
 
-/* ---------- عدّاد الأجهزة (CountAPI) — زيادة مرة واحدة لكل جهاز ---------- */
+/* ---------- visitor counter via CountAPI (one increment per device) ---------- */
 const COUNT_NAMESPACE = 'alaa319631-ajami';
 const COUNT_KEY = 'visitors';
 const COUNTAPI_HIT = `https://api.countapi.xyz/hit/${encodeURIComponent(COUNT_NAMESPACE)}/${encodeURIComponent(COUNT_KEY)}`;
@@ -350,7 +314,7 @@ const COUNTAPI_GET  = `https://api.countapi.xyz/get/${encodeURIComponent(COUNT_N
 
 function displayCount(v){
   const el = document.getElementById('visitor-count');
-  el.textContent = (typeof v === 'number') ? v.toLocaleString() : '--';
+  if(el) el.textContent = (typeof v === 'number') ? v.toLocaleString() : '--';
 }
 
 async function fetchCount(){
@@ -365,36 +329,50 @@ async function fetchCount(){
   }
 }
 
+/* Hit first (if not counted) then fetch so public viewers see updated value */
 async function hitCountOnce(){
   try{
-    if(localStorage.getItem('ajami_counted_v3')) return;
+    if(localStorage.getItem('ajami_counted_public')) return false;
     const r = await fetch(COUNTAPI_HIT);
     if(!r.ok) throw new Error('hit failed');
     const j = await r.json();
     if(j && typeof j.value !== 'undefined'){
-      displayCount(j.value);
-      localStorage.setItem('ajami_counted_v3', JSON.stringify({ts:Date.now()}));
+      localStorage.setItem('ajami_counted_public', JSON.stringify({ts:Date.now()}));
+      return true;
     }
+    return false;
   }catch(e){
     console.warn('hitCountOnce error', e);
+    return false;
   }
 }
 
-/* ---------- أقسام وبداية التشغيل ---------- */
+/* ---------- tabs handling ---------- */
 function tab(n, btn){
   const sections = [document.getElementById('s0'), document.getElementById('s1'), document.getElementById('s2')];
   sections.forEach((s,i)=> s.style.display = (i===n) ? 'block' : 'none');
-  document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.nav-bar .nav-btn').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
 }
 
-window.addEventListener('load', ()=>{
+/* ---------- init: ensure unique-increment then show count to everyone ---------- */
+window.addEventListener('load', async ()=>{
   updateDrops();
   saveDB();
   if(document.getElementById('calc-stack').children.length === 0) addRow();
   if(opMode === 'sub'){ document.getElementById('op-sum').classList.remove('active'); document.getElementById('op-sub').classList.add('active'); }
   else{ document.getElementById('op-sum').classList.add('active'); document.getElementById('op-sub').classList.remove('active'); }
-  fetchCount().finally(()=> hitCountOnce());
+
+  // If this device hasn't been counted yet: hit first to increment then fetch updated value.
+  // Otherwise just fetch current value so everyone sees the total number.
+  const already = localStorage.getItem('ajami_counted_public');
+  if(!already){
+    await hitCountOnce(); // attempt increment (sets local flag on success)
+    await fetchCount();    // read updated value
+  } else {
+    await fetchCount();
+  }
+
   doConv(); doSum();
 });
 </script>
