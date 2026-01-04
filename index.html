@@ -1,253 +1,361 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <title>محول فاتح العجمي - الإصدار المعتمد 115</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --neon-purple: #bc13fe;
-            --neon-blue: #00d4ff;
-            --neon-green: #00ffa3;
-            --bg-deep: #05070a;
-            --glass: rgba(15, 22, 36, 0.8);
-        }
+  <meta charset="utf-8" />
+  <title>محول فاتح العجمي - إصدار محدث</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --neon-purple:#bc13fe;
+      --neon-blue:#00d4ff;
+      --neon-green:#00ffa3;
+      --bg-deep:#05070a;
+      --glass: rgba(12,18,30,0.75);
+      --glass-2: rgba(255,255,255,0.03);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font-family:'Cairo', sans-serif; background:linear-gradient(180deg, #030409 0%, #07101a 100%); color:#fff;
+      display:flex; align-items:center; justify-content:center; padding:24px;
+    }
 
-        body {
-            margin: 0; font-family: 'Cairo', sans-serif;
-            background: var(--bg-deep); color: #fff; min-height: 100vh;
-            display: flex; justify-content: center; align-items: center;
-            overflow-x: hidden; position: relative;
-        }
+    /* Background glow circles */
+    .background-circles{position:fixed; inset:0; z-index:-1; overflow:hidden}
+    .circle{position:absolute; border-radius:50%; filter:blur(60px); opacity:0.12; transform-origin:center; animation:float 9s ease-in-out infinite;}
+    .c1{width:520px;height:520px;background:linear-gradient(135deg,var(--neon-purple),#7a0bff); top:-10%; right:-15%}
+    .c2{width:420px;height:420px;background:linear-gradient(135deg,var(--neon-blue),#00a6ff); bottom:-20%; left:-10%}
+    .c3{width:300px;height:300px;background:linear-gradient(135deg,var(--neon-green),#00e6a8); top:30%; left:30%}
+    @keyframes float{0%{transform:translateY(0) scale(1)}50%{transform:translateY(-20px) scale(1.05)}100%{transform:translateY(0) scale(1)}}
 
-        .background-circles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; overflow: hidden; }
-        .circle { position: absolute; border-radius: 50%; filter: blur(60px); opacity: 0.15; animation: pulse 8s infinite alternate; }
-        .c1 { width: 400px; height: 400px; background: var(--neon-purple); top: 10%; left: -10%; }
-        .c2 { width: 350px; height: 350px; background: var(--neon-blue); bottom: 10%; right: -5%; }
-        .c3 { width: 300px; height: 300px; background: var(--neon-green); top: 40%; left: 30%; }
+    .app-shell{
+      width:100%; max-width:540px; border-radius:26px; padding:22px; background:var(--glass);
+      border:1px solid rgba(255,255,255,0.04); box-shadow:0 10px 40px rgba(0,0,0,0.6), 0 0 60px rgba(124, 25, 252, 0.06);
+      backdrop-filter:blur(14px);
+    }
 
-        @keyframes pulse {
-            0% { transform: scale(1) translate(0, 0); opacity: 0.1; }
-            100% { transform: scale(1.2) translate(20px, 30px); opacity: 0.2; }
-        }
+    .header{text-align:center;margin-bottom:8px}
+    .header h1{
+      margin:0; font-size:1.5rem; font-weight:900;
+      background:linear-gradient(90deg,var(--neon-purple),var(--neon-blue)); -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+      letter-spacing:0.6px;
+    }
+    .sub{font-size:0.85rem; color:rgba(255,255,255,0.6); margin-top:6px}
 
-        .app-shell {
-            width: 92%; max-width: 440px; background: var(--glass);
-            border-radius: 45px; padding: 30px;
-            box-shadow: 0 0 50px rgba(0, 0, 0, 0.5), 0 0 20px rgba(188, 19, 254, 0.15);
-            border: 1px solid rgba(188, 19, 254, 0.2);
-            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-        }
+    .nav-bar{display:flex; gap:8px; margin:16px 0; background:var(--glass-2); padding:6px; border-radius:14px}
+    .nav-btn{flex:1; padding:10px; border-radius:10px; border:none; background:transparent; color:#fff; cursor:pointer; font-weight:800; font-size:0.9rem}
+    .nav-btn.active{background:linear-gradient(90deg,var(--neon-purple),var(--neon-blue)); box-shadow:0 8px 24px rgba(124, 25, 252, 0.12)}
 
-        .header h1 {
-            text-align: center; font-size: 1.8rem; font-weight: 900; margin: 0 0 25px 0;
-            background: linear-gradient(135deg, var(--neon-purple), var(--neon-blue));
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-        }
+    .glass-box{background:rgba(0,0,0,0.35); border-radius:14px; padding:14px; border:1px solid rgba(255,255,255,0.03)}
+    input, select{width:100%; padding:12px; border-radius:10px; border:1px solid rgba(255,255,255,0.04); background:#000; color:var(--neon-blue); font-weight:800; outline:none; font-size:1rem; text-align:center}
 
-        .nav-bar {
-            display: flex; background: rgba(0, 0, 0, 0.5); padding: 5px; border-radius: 20px;
-            margin-bottom: 25px; border: 1px solid rgba(255, 255, 255, 0.05);
-        }
+    .row{display:flex; gap:8px; align-items:center}
+    .calc-row{display:flex; gap:8px; margin-bottom:10px; align-items:center}
+    .calc-row input{flex:2; padding:10px; font-size:1rem; border-radius:10px; text-align:center}
+    .calc-row select{flex:1.3; padding:10px; border-radius:10px}
+    .del-btn{background:transparent;border:none;color:#ff6b6b;font-size:1.1rem; cursor:pointer}
+    .sign-btn{min-width:44px; height:44px; border-radius:10px; border:1px solid rgba(255,255,255,0.04); background:rgba(255,255,255,0.02); color:var(--neon-green); font-weight:900; cursor:pointer}
 
-        .nav-btn {
-            flex: 1; padding: 12px; border-radius: 15px; border: none;
-            background: none; color: #fff; cursor: pointer; font-weight: 700;
-            transition: 0.4s; font-size: 0.85rem;
-        }
+    .result-panel{text-align:center; margin-top:12px; padding:28px 16px; border-radius:20px; background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); border:1px solid rgba(255,255,255,0.03)}
+    .val-main{display:block; font-size:2.8rem; font-weight:900; color:var(--neon-green); text-shadow:0 0 14px rgba(0,255,163,0.14)}
+    .small-muted{font-size:0.82rem; color:rgba(255,255,255,0.6); margin-top:6px}
 
-        .nav-btn.active {
-            background: linear-gradient(45deg, var(--neon-purple), #7000ff);
-            box-shadow: 0 0 15px rgba(188, 19, 254, 0.4);
-        }
+    .refresh-btn{margin-top:16px; width:56px; height:56px; border-radius:50%; border:none; background:linear-gradient(90deg,var(--neon-purple),var(--neon-blue)); color:#fff; font-size:1.2rem; cursor:pointer}
 
-        .glass-box {
-            background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(188, 19, 254, 0.1);
-            border-radius: 25px; padding: 20px; margin-bottom: 15px;
-        }
+    .footer-brand{margin-top:18px; text-align:center; padding:12px; border-radius:12px; border:1px solid rgba(0,212,255,0.12); color:rgba(255,255,255,0.9)}
+    .footer-brand .name{font-weight:900; color:var(--neon-blue)}
+    .footer-brand .phone{margin-top:6px; display:block}
 
-        input, select {
-            width: 100%; padding: 14px; border-radius: 15px; border: 1px solid rgba(0, 212, 255, 0.2);
-            background: #000; color: var(--neon-blue); font-size: 1.1rem;
-            font-weight: 700; outline: none; text-align: center;
-        }
+    .section{display:none}
+    .active-sec{display:block; animation:fadeIn .35s ease-out}
+    @keyframes fadeIn{from{opacity:0; transform:scale(.995)} to{opacity:1; transform:scale(1)}}
 
-        .calc-row { display: flex; gap: 8px; margin-bottom: 12px; align-items: center; }
-        .calc-row input { flex: 2; }
-        .calc-row select { flex: 1.2; }
-        .del-btn { background: none; border: none; color: #ff4b5c; font-size: 1.3rem; cursor: pointer; }
+    /* operation toggle */
+    .segmented{display:flex; gap:8px; margin-top:8px}
+    .segmented button{flex:1; padding:10px; border-radius:10px; border:1px solid rgba(255,255,255,0.03); background:transparent; color:#fff; font-weight:800; cursor:pointer}
+    .segmented button.active{background:linear-gradient(90deg,var(--neon-purple),var(--neon-blue)); box-shadow:0 8px 18px rgba(0,0,0,0.35)}
 
-        .result-panel {
-            text-align: center; padding: 35px 15px; border-radius: 35px;
-            background: rgba(0, 0, 0, 0.4); border: 1px solid var(--neon-purple);
-            margin-top: 10px;
-        }
-
-        .val-main {
-            font-size: 3.2rem; font-weight: 900; color: var(--neon-green);
-            text-shadow: 0 0 20px rgba(0, 255, 163, 0.4); display: block;
-        }
-
-        .refresh-btn {
-            margin-top: 20px; width: 55px; height: 55px; border-radius: 50%;
-            border: none; background: linear-gradient(45deg, var(--neon-purple), var(--neon-blue));
-            color: #fff; font-size: 1.4rem; cursor: pointer; display: inline-flex; align-items: center; justify-content: center;
-        }
-
-        .footer-brand {
-            margin-top: 35px; text-align: center; padding: 15px;
-            border-radius: 20px; border: 2px solid var(--neon-blue);
-            background: rgba(0, 0, 0, 0.5);
-        }
-        .footer-brand .name { display: block; font-size: 1.4rem; font-weight: 900; color: var(--neon-blue); }
-        .footer-brand .phone { color: #fff; font-size: 1rem; margin-top: 5px; display: block; }
-
-        .section { display: none; }
-        .active-sec { display: block; animation: fadeIn 0.4s ease-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
-    </style>
+    /* responsive */
+    @media (max-width:420px){
+      .val-main{font-size:2rem}
+      .header h1{font-size:1.2rem}
+    }
+  </style>
 </head>
 <body>
-
-<div class="background-circles">
+  <div class="background-circles" aria-hidden="true">
     <div class="circle c1"></div>
     <div class="circle c2"></div>
     <div class="circle c3"></div>
-</div>
+  </div>
 
-<div class="app-shell">
-    <div class="header"><h1>محول العملة السوري</h1></div>
-
-    <div class="nav-bar">
-        <button class="nav-btn active" onclick="tab(0, this)">تحويل</button>
-        <button class="nav-btn" onclick="tab(1, this)">حاسبة</button>
-        <button class="nav-btn" onclick="tab(2, this)">إعدادات</button>
+  <div class="app-shell" role="application" aria-label="محول عملة فاتح العجمي">
+    <div class="header">
+      <h1>محول العملة السوري</h1>
+      <div class="sub">الإصدار المحسن — يمكنك الآن اختيار جمع أو طرح في الحاسبة</div>
     </div>
 
-    <div id="s0" class="section active-sec">
-        <div class="glass-box">
-            <input type="number" id="amt" placeholder="0.00" oninput="doConv()">
-            <div style="display: flex; gap: 10px; margin-top: 15px;">
-                <select id="from" onchange="doConv()"></select>
-                <select id="to" onchange="doConv()"></select>
+    <div class="nav-bar" role="tablist" aria-label="الأقسام">
+      <button class="nav-btn active" onclick="tab(0, this)" role="tab">تحويل</button>
+      <button class="nav-btn" onclick="tab(1, this)" role="tab">حاسبة</button>
+      <button class="nav-btn" onclick="tab(2, this)" role="tab">إعدادات</button>
+    </div>
+
+    <!-- تحويل -->
+    <div id="s0" class="section active-sec" role="tabpanel">
+      <div class="glass-box">
+        <input type="number" id="amt" placeholder="0.00" oninput="doConv()" aria-label="المبلغ">
+        <div style="display:flex; gap:10px; margin-top:12px;">
+          <select id="from" onchange="doConv()" aria-label="من"></select>
+          <select id="to" onchange="doConv()" aria-label="إلى"></select>
+        </div>
+      </div>
+
+      <div class="result-panel" aria-live="polite">
+        <span class="val-main" id="res">0.00</span>
+        <div class="small-muted">النتيجة بالنسبة لـ سوري جديد</div>
+        <button class="refresh-btn" onclick="cls(0)" title="مسح">🔄</button>
+      </div>
+    </div>
+
+    <!-- حاسبة -->
+    <div id="s1" class="section" role="tabpanel" aria-hidden="true">
+      <div id="calc-stack" style="max-height:240px; overflow:auto; margin-bottom:10px;"></div>
+
+      <div style="display:flex; gap:10px; margin-bottom:12px;">
+        <button onclick="addRow()" style="flex:1; padding:12px; border-radius:12px; border:1px solid var(--neon-purple); background:transparent; color:var(--neon-purple); font-weight:900; cursor:pointer;">+ إضافة مبلغ</button>
+        <button onclick="clearAllRows()" style="padding:12px; border-radius:12px; border:1px solid rgba(255,255,255,0.06); background:transparent; color:#fff; font-weight:900; cursor:pointer;">🧹 مسح الكل</button>
+      </div>
+
+      <div class="glass-box" style="display:flex; gap:10px; flex-direction:column">
+        <div style="display:flex; gap:10px; align-items:center;">
+          <div style="flex:1;">
+            <select id="target" onchange="doSum()" aria-label="التحويل إلى"></select>
+          </div>
+          <div style="width:140px;">
+            <div class="segmented" role="radiogroup" aria-label="اختيار العملية">
+              <button id="op-sum" class="active" onclick="setOp('sum', this)" aria-pressed="true">جمع</button>
+              <button id="op-sub" onclick="setOp('sub', this)" aria-pressed="false">طرح</button>
             </div>
+          </div>
         </div>
-        <div class="result-panel">
-            <span class="val-main" id="res">0.00</span>
-            <button class="refresh-btn" onclick="cls(0)">🔄</button>
-        </div>
+        <div style="font-size:0.82rem; color:rgba(255,255,255,0.6);">إذا اخترت <strong>طرح</strong> فسيؤول الحساب إلى: القيمة الأولى - مجموع الباقي (يمكنك تغيير إشارة كل صف يدوياً)</div>
+      </div>
+
+      <div class="result-panel" aria-live="polite">
+        <span class="val-main" id="total">0.00</span>
+        <div class="small-muted">المجموع بحسب الاختيارات أعلاه</div>
+        <button class="refresh-btn" onclick="cls(1)">🔄</button>
+      </div>
     </div>
 
-    <div id="s1" class="section">
-        <div id="calc-stack" style="max-height: 250px; overflow-y: auto;"></div>
-        <button onclick="addRow()" style="width:100%; padding:12px; border-radius:15px; border:1px solid var(--neon-purple); background:none; color:var(--neon-purple); font-weight:800; margin: 15px 0; cursor:pointer;">+ إضافة مبلغ</button>
-        <div class="glass-box"><select id="target" onchange="doSum()"></select></div>
-        <div class="result-panel">
-            <span class="val-main" id="total">0.00</span>
-            <button class="refresh-btn" onclick="cls(1)">🔄</button>
-        </div>
-    </div>
+    <!-- إعدادات -->
+    <div id="s2" class="section" role="tabpanel" aria-hidden="true">
+      <div class="glass-box">
+        <input type="text" id="n-n" placeholder="اسم العملة الجديدة" style="margin-bottom:10px;" aria-label="اسم العملة الجديدة">
+        <input type="number" id="n-v" placeholder="السعر" aria-label="سعر العملة">
+        <p style="font-size:0.78rem; color:var(--neon-blue); margin:10px 0 6px;">بالنسبة لـ (المرجع):</p>
+        <select id="n-r" style="margin-top:5px;"></select>
+        <button onclick="addCur()" style="width:100%; padding:12px; border-radius:12px; border:none; background:linear-gradient(90deg,var(--neon-purple),var(--neon-blue)); color:#fff; font-weight:900; margin-top:14px; cursor:pointer;">تحديث النظام</button>
+      </div>
 
-    <div id="s2" class="section">
-        <div class="glass-box">
-            <input type="text" id="n-n" placeholder="اسم العملة الجديدة" style="margin-bottom:10px;">
-            <input type="number" id="n-v" placeholder="السعر">
-            <p style="font-size: 0.75rem; color: var(--neon-blue); margin: 10px 0 5px;">بالنسبة لـ (المرجع):</p>
-            <select id="n-r" style="margin-top:5px;"></select>
-            <button onclick="addCur()" style="width:100%; padding:15px; border-radius:15px; border:none; background:linear-gradient(45deg, var(--neon-purple), var(--neon-blue)); color:#fff; font-weight:900; margin-top:20px; cursor:pointer;">تحديث النظام</button>
-        </div>
-        <div id="db-list" style="max-height: 150px; overflow-y: auto;"></div>
+      <div id="db-list" style="max-height:180px; overflow:auto; margin-top:12px;"></div>
     </div>
 
     <div class="footer-brand">
-        <span class="name">فاتح العجمي</span>
-        <span class="phone">0930887739 📞</span>
+      <span class="name">فاتح العجمي</span>
+      <span class="phone">0930887739 📞</span>
     </div>
-</div>
+  </div>
 
-<script>
-    // الإعداد الافتراضي كما طلبت: 1 دولار = 115 سوري جديد
+  <script>
+    // المفتاح والبيانات الافتراضية (حافظت على نفس التخزين المحلي)
     let db = JSON.parse(localStorage.getItem("sy_fatih_115")) || {
-        "سوري جديد": 1,
-        "دولار": 115,
-        "سوري قديم": 0.01
+      "سوري جديد": 1,
+      "دولار": 115,
+      "سوري قديم": 0.01
     };
 
-    function sync() {
-        localStorage.setItem("sy_fatih_115", JSON.stringify(db));
-        updateDrops();
-        renderList();
+    // وضع الحاسبة: 'sum' أو 'sub'
+    let opMode = 'sum';
+
+    function sync(){
+      localStorage.setItem("sy_fatih_115", JSON.stringify(db));
+      updateDrops();
+      renderList();
     }
 
-    function updateDrops() {
-        const h = Object.keys(db).map(k => `<option value="${k}">${k}</option>`).join('');
-        ['from','to','target','n-r'].forEach(id => {
-            const e = document.getElementById(id); const v = e.value; e.innerHTML = h; if(v && db[v]) e.value = v;
+    function updateDrops(){
+      const options = Object.keys(db).map(k => `<option value="${k}">${k}</option>`).join('');
+      ['from','to','target','n-r'].forEach(id=>{
+        const el = document.getElementById(id); if(!el) return;
+        const prev = el.value;
+        el.innerHTML = options;
+        if(prev && db[prev] !== undefined) el.value = prev;
+      });
+      // تحديث أي قوائم صفوف الحاسبة
+      document.querySelectorAll('.r-c').forEach(s=>{
+        const prev = s.value;
+        s.innerHTML = options;
+        if(prev && db[prev] !== undefined) s.value = prev;
+      });
+    }
+
+    function addCur(){
+      const name = document.getElementById('n-n').value.trim();
+      const ref = document.getElementById('n-r').value;
+      const v = parseFloat(document.getElementById('n-v').value);
+      if(!name || isNaN(v)) return alert('الرجاء إدخال اسم وسعر صالحين.');
+      // نحفظ قيمة العملة كنسبة إلى "سوري جديد"
+      db[name] = db[ref] * v;
+      // حافظ على خاصية السورى القديم إذا عدلت السورى الجديد
+      if(name === "سوري جديد" && db["سوري قديم"] !== undefined){
+        // recalibrate سوري قديم إن رغبت
+        db["سوري قديم"] = (db["سوري قديم"] / db[name]) * db["سوري جديد"];
+      }
+      document.getElementById('n-n').value = '';
+      document.getElementById('n-v').value = '';
+      sync();
+    }
+
+    function renderList(){
+      document.getElementById('db-list').innerHTML = Object.keys(db).map(k=>{
+        return `<div style="display:flex;justify-content:space-between;padding:10px;border-bottom:1px solid rgba(255,255,255,0.03);font-size:0.95rem">
+          <div><strong>1 ${k}</strong><div style="font-size:0.8rem;color:rgba(255,255,255,0.6);">قيمته بـ سوري جديد</div></div>
+          <div style="text-align:right;color:var(--neon-purple);font-weight:900">${db[k].toLocaleString(undefined,{maximumFractionDigits:4})}</div>
+        </div>`;
+      }).join('');
+    }
+
+    function tab(n, btn){
+      document.querySelectorAll('.section').forEach((s,i)=>{
+        s.classList.toggle('active-sec', i===n);
+        s.setAttribute('aria-hidden', i===n ? 'false' : 'true');
+      });
+      document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+    }
+
+    // تحويل العملة
+    function doConv(){
+      const a = parseFloat(document.getElementById('amt').value) || 0;
+      const from = db[document.getElementById('from').value] || 1;
+      const to = db[document.getElementById('to').value] || 1;
+      const res = (a * from) / to;
+      document.getElementById('res').innerText = res.toLocaleString(undefined, {maximumFractionDigits:2});
+    }
+
+    // إضافة صف في الحاسبة
+    function addRow(){
+      const stack = document.getElementById('calc-stack');
+      const d = document.createElement('div');
+      d.className = 'calc-row';
+      // إشارة افتراضية تعتمد على نمط العملية: في الطرح، الصف الأول موجب والباقي سالب
+      const existingRows = stack.querySelectorAll('.calc-row').length;
+      let defaultSign = '+';
+      if(opMode === 'sub') defaultSign = existingRows === 0 ? '+' : '-';
+
+      d.innerHTML = `
+        <button class="sign-btn" title="تبديل الإشارة" onclick="toggleSign(this)">${defaultSign}</button>
+        <input type="number" class="r-v" placeholder="0" oninput="doSum()">
+        <select class="r-c" onchange="doSum()"></select>
+        <button class="del-btn" title="حذف" onclick="this.parentElement.remove(); doSum();">✕</button>
+      `;
+      stack.appendChild(d);
+      updateDrops();
+      // بعد إضافة صف نملأ قيمة السلكت إذا لم تكن موجودة
+      const sel = d.querySelector('.r-c');
+      sel.value = Object.keys(db)[0] || '';
+      doSum();
+    }
+
+    // تبديل إشارة صف
+    function toggleSign(btn){
+      btn.textContent = btn.textContent === '+' ? '-' : '+';
+      doSum();
+    }
+
+    // مسح الحقول أو إعادة تعيين
+    function cls(n){
+      if(n===0){
+        document.getElementById('amt').value = '';
+        doConv();
+      } else {
+        document.getElementById('calc-stack').innerHTML = '';
+        addRow();
+        doSum();
+      }
+    }
+
+    // مسح كل الصفوف (زر خاص)
+    function clearAllRows(){
+      if(!confirm('هل تريد مسح كل المبالغ في الحاسبة؟')) return;
+      document.getElementById('calc-stack').innerHTML = '';
+      addRow();
+      doSum();
+    }
+
+    // تعيين نمط العملية (جمع/طرح)
+    function setOp(mode, btn){
+      opMode = mode;
+      document.querySelectorAll('.segmented button').forEach(b=>b.classList.remove('active'));
+      document.querySelectorAll('.segmented button').forEach(b=>b.setAttribute('aria-pressed','false'));
+      btn.classList.add('active');
+      btn.setAttribute('aria-pressed','true');
+
+      // عند التبديل إلى وضع الطرح، نجعل الصف الأول موجب وباقي الصفوف سالب تلقائياً
+      if(mode === 'sub'){
+        const rows = Array.from(document.querySelectorAll('.calc-row'));
+        rows.forEach((r, idx)=>{
+          const s = r.querySelector('.sign-btn');
+          if(idx === 0) s.textContent = '+';
+          else s.textContent = '-';
         });
-        document.querySelectorAll('.r-c').forEach(s => { const v = s.value; s.innerHTML = h; if(v) s.value = v; });
+      } else {
+        // في وضع الجمع، كل الإشارات موجبة
+        document.querySelectorAll('.sign-btn').forEach(s => s.textContent = '+');
+      }
+      doSum();
     }
 
-    function addCur() {
-        const n = document.getElementById('n-n').value.trim();
-        const r = document.getElementById('n-r').value;
-        const v = parseFloat(document.getElementById('n-v').value);
-        if(!n || !v) return;
+    // حساب المجموع مع احترام الإشارات والنمط
+    function doSum(){
+      let totalBase = 0;
+      const rows = Array.from(document.querySelectorAll('.calc-row'));
+      rows.forEach((row, idx) => {
+        const signBtn = row.querySelector('.sign-btn');
+        const sign = signBtn && signBtn.textContent === '-' ? -1 : 1;
+        const value = parseFloat(row.querySelector('.r-v').value) || 0;
+        const cur = row.querySelector('.r-c').value;
+        const rate = db[cur] || 1;
+        totalBase += sign * (value * rate);
+      });
 
-        db[n] = db[r] * v;
-        if(n === "سوري جديد") db["سوري قديم"] = v / 100;
+      // إذا لم توجد صفوف (نادر) نضيف صف واحد افتراضياً
+      if(rows.length === 0) { addRow(); totalBase = 0; }
 
-        document.getElementById('n-n').value = '';
-        document.getElementById('n-v').value = '';
-        sync();
+      // تحويل إلى العملة الهدف
+      const targetKey = document.getElementById('target').value;
+      const targetRate = db[targetKey] || 1;
+      const result = totalBase / targetRate;
+
+      // عرض النتيجة مع علامات للأرقام السالبة
+      document.getElementById('total').innerText = result.toLocaleString(undefined, {maximumFractionDigits:2});
     }
 
-    function renderList() {
-        document.getElementById('db-list').innerHTML = Object.keys(db).map(k => `
-            <div style="display:flex; justify-content:space-between; padding:10px; border-bottom:1px solid rgba(255,255,255,0.05); font-size:0.9rem;">
-                <span>1 ${k} =</span>
-                <span style="color:var(--neon-purple); font-weight:900;">${db[k].toLocaleString()} سوري جديد</span>
-            </div>
-        `).join('');
-    }
-
-    function tab(n, btn) {
-        document.querySelectorAll('.section').forEach((s, i) => s.classList.toggle('active-sec', i === n));
-        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-    }
-
-    function doConv() {
-        const a = parseFloat(document.getElementById('amt').value) || 0;
-        const fromVal = db[document.getElementById('from').value];
-        const toVal = db[document.getElementById('to').value];
-        const res = (a * fromVal) / toVal;
-        document.getElementById('res').innerText = res.toLocaleString(undefined, {maximumFractionDigits: 2});
-    }
-
-    function addRow() {
-        const d = document.createElement('div');
-        d.className = 'calc-row';
-        d.innerHTML = `<input type="number" class="r-v" placeholder="0" oninput="doSum()"><select class="r-c" onchange="doSum()"></select><button class="del-btn" onclick="this.parentElement.remove(); doSum();">✕</button>`;
-        document.getElementById('calc-stack').appendChild(d);
-        updateDrops();
-    }
-
-    function doSum() {
-        let totalBase = 0;
-        document.querySelectorAll('.calc-row').forEach(row => {
-            totalBase += (parseFloat(row.querySelector('.r-v').value) || 0) * db[row.querySelector('.r-c').value];
-        });
-        const target = db[document.getElementById('target').value];
-        document.getElementById('total').innerText = (totalBase / target).toLocaleString(undefined, {maximumFractionDigits: 2});
-    }
-
-    function cls(n) {
-        if(n===0) { document.getElementById('amt').value=''; doConv(); }
-        else { document.getElementById('calc-stack').innerHTML=''; addRow(); doSum(); }
-    }
-
-    window.onload = () => { sync(); addRow(); };
-</script>
+    // بدء التشغيل
+    window.onload = ()=>{
+      sync();
+      // إضافة صف افتراضي إذا لا يوجد
+      if(document.getElementById('calc-stack').children.length === 0) addRow();
+      // تحديد عناصر منطقية للـ from/to على الأقل
+      const f = document.getElementById('from'); if(!f.value) f.value = Object.keys(db)[0];
+      const t = document.getElementById('to'); if(!t.value) t.value = Object.keys(db)[1] || Object.keys(db)[0];
+      const trg = document.getElementById('target'); if(!trg.value) trg.value = Object.keys(db)[0];
+      doConv();
+      doSum();
+    };
+  </script>
 </body>
 </html>
